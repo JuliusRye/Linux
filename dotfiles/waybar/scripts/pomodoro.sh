@@ -75,8 +75,6 @@ elif [[ "$STATE" == "break" ]]; then
     ICON=""
 elif [[ "$STATE" == "break paused" ]]; then
     ICON="-󱖐"
-else
-    echo "$(($(date +%s) + WORK_DURATION * 60))|$((WORK_DURATION * 60))|inactive|sent" > "$TIMER_FILE"
 fi
 
 # Update the pomodoro timer

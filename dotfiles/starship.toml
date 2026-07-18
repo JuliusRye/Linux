@@ -11,6 +11,7 @@ $nodejs\
 $rust\
 $golang\
 $php\
+$conda\
 $python\
 [](bg:#2B2B2B fg:#1A1A1A)\
 $time\
@@ -40,6 +41,11 @@ format = '[[ $symbol $branch ](fg:#5C5D8D bg:#2B2B2B)]($style)'
 [git_status]
 style = "bg:#2B2B2B"
 format = '[[($all_status$ahead_behind )](fg:#5C5D8D bg:#2B2B2B)]($style)'
+
+[conda]
+symbol = "conda "
+style = "bg:#2B2B2B"
+format = '[[ $symbol $environment ](fg:#5C5D8D bg:#2B2B2B)]($style)'
 
 [python]
 symbol = ""

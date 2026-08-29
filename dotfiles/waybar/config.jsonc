@@ -2,6 +2,7 @@
 {
     "layer": "top",
     "position": "top",
+    "ipc": true, // Allows for toggeling visibility
     "modules-left": [
         "clock",
         "hyprland/workspaces",
@@ -34,16 +35,15 @@
 		"format": "",
 		"tooltip-format": "Hyprland"
 	},
-    
-    "hyprland/window": {
-        "format": "{}",
-        "icon": true,
-        "rewrite": {
-            "class<firefox>": " - $1",
-            "class<code>": " - $1",
-            "class<kitty>": " - $1"
-        },
-        "separate-outputs": true
+  "hyprland/window": {
+    "format": "{}",
+    "icon": true,
+    "rewrite": {
+      "class<firefox>": " - $1",
+      "class<code>": " - $1",
+      "class<kitty>": " - $1"
+    },
+      "separate-outputs": true
     },
     "hyprland/workspaces": {
 		"disable-scroll": true,
@@ -192,7 +192,7 @@
 		"interval": 5,
 		"format": "󰋊 {percentage_used:2}%",
 		"unit": "GB",
-		"tooltip-format": "Free:\t{specific_free:6.2f} GB\nUsed:\t{specific_used:6.2f} GB\nTotal:\t{specific_total:6.2f} GB",		
+		"tooltip-format": "Free:\t{specific_free:6.2f} GB\nUsed:\t{specific_used:6.2f} GB\nTotal:\t{specific_total:6.2f} GB",
 		"path": "/",
 		"on-click": "kitty -- ncdu"
 	},

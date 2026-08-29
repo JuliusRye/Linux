@@ -2,12 +2,13 @@
 {
     "layer": "top",
     "position": "top",
-    "ipc": true, // Allows for toggeling visibility
+    // Waybar's implicit default is 30, which is shorter than the modules need
+    // at this font size; leaving it implicit forces a second configure pass.
+    "height": 32,
     "modules-left": [
         "clock",
-        "hyprland/workspaces",
-		"network",
-		"custom/arch"
+        "ext/workspaces",
+		"network"
     ],
     "modules-center": [
         "hyprland/window"
@@ -23,14 +24,6 @@
         "power-profiles-daemon",
         "tray"
     ],
-	"custom/arch": {
-		"exec": "~/.config/waybar/scripts/pomodoro.sh",
-		"return-type": "plain",
-		"interval": 1,
-		"on-click": "~/.config/waybar/scripts/pomodoro.sh next",
-		"on-click-right": "~/.config/waybar/scripts/pomodoro.sh start/pause",
-		"on-click-middle": "~/.config/waybar/scripts/pomodoro.sh enable/disable"
-	},
 	"custom/hypr": {
 		"format": "",
 		"tooltip-format": "Hyprland"
@@ -45,25 +38,29 @@
     },
       "separate-outputs": true
     },
-    "hyprland/workspaces": {
-		"disable-scroll": true,
-		"show-special": true,
-		"all-outputs": true,
-		"format": "{icon}",
-		"format-icons": { // nf-md-<name>_box_multiple
-			"1": "󰼏",
-			"2": "󰼐",
-			"3": "󰼑",
-			"4": "󰼒",
-			"5": "󰼓",
-			"6": "󰼔",
-			"7": "󰼕",
-			"8": "󰼖",
-			"9": "󰼗",
-			"10": "󰼎", // 󰿪
-            "special": "󰤴"
-		}
-	},
+    // Uses the ext-workspace-v1 Wayland protocol instead of "hyprland/workspaces".
+    // The hyprland module switches workspaces by sending the legacy IPC string
+    // "dispatch workspace N", which Hyprland rejects while the config is Lua
+    // (it evaluates the argument as Lua, so the click silently does nothing).
+    "ext/workspaces": {
+        "on-click": "activate",
+        "all-outputs": true,
+        "ignore-hidden": false,
+        "format": "{icon}",
+        "format-icons": { // nf-md-<name>_box_multiple
+            "1": "󰼏",
+            "2": "󰼐",
+            "3": "󰼑",
+            "4": "󰼒",
+            "5": "󰼓",
+            "6": "󰼔",
+            "7": "󰼕",
+            "8": "󰼖",
+            "9": "󰼗",
+            "10": "󰼎",
+            "special:magic": "󰤴"
+        }
+    },
 	"network": {
 		// "interface": "wlp2s0",
 		"format": "{ifname}",

@@ -13,6 +13,12 @@ window#waybar {
     background: transparent;
 }
 
+/* Waybar hides the bar (SIGUSR1 toggle) purely by adding this class:
+   without a rule here the bar stays drawn while becoming click-through. */
+window#waybar.hidden {
+    opacity: 0;
+}
+
 .modules-left,
 .modules-center,
 .modules-right {
@@ -51,7 +57,6 @@ window#waybar {
 }
 
 #tray,
-#custom-arch,
 #custom-hypr {
     padding: 3px 5px;
     padding-right: 5px;

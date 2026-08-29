@@ -1,16 +1,45 @@
+/* The bar is styled as one more starship prompt line: the same two-tone
+   powerline segments, the same colours, the same font as kitty - and the
+   same see-through-ness, so it settles into the wallpaper the way an
+   unfocused terminal does instead of sitting on top of it.
+   Tones and colours are taken from starship.toml. */
+@define-color tone-dark  #1A1A1A; /* starship's outer segments (logo, time) */
+/* starship's inner segment tone. The bar runs on a single flat tone rather
+   than the prompt's two, so this is no longer a background - it survives as
+   the colour of the [|] dividers, which need to sit just above tone-dark to
+   stay visible. Set the segment backgrounds below back to it to get the
+   two-tone powerline again. */
+@define-color tone-mid   #2B2B2B;
+@define-color star-green #66BB6A; /* $time and the distro logo - the bar's resting colour */
+@define-color star-peach #f7a278; /* $directory - here, whatever is live right now */
+@define-color star-urgent #88292f;
+
 * {
     font-size: 15px;
-    font-family: "Symbols Nerd Font Mono";
+    /* kitty's font_family, so the bar renders in the same typeface as the
+       prompt it is imitating. Symbols font as the fallback for Nerd glyphs. */
+    font-family: "CaskaydiaCove Nerd Font", "Symbols Nerd Font Mono";
+    /* GTK's default button focus ring / shadow has no equivalent in a
+       terminal line. */
+    border: none;
+    box-shadow: none;
+    text-shadow: none;
+    min-height: 0;
 }
 
-tooltip label {
-    font-size: 15px;
-    color: #66BB6A;
-    font-family: "Caskaydia Cove Nerd Font";
-}
-
+/* kitty draws the prompt with background_opacity 0.5 and Hyprland then
+   dims the unfocused window to inactive_opacity 0.85. Fading the whole
+   waybar surface the same way is what makes it read as part of the
+   background - and it keeps the powerline seams perfect, because the
+   segments composite against each other at full opacity first and only
+   then against the wallpaper.
+   0.70 was picked by measurement, not by eye: at that value the bar's dark
+   segment samples #181A1F and its green text #4B8854, against #17181A and
+   #4B8951 for the real prompt in an unfocused kitty. This single number is
+   the blend knob - lower to recede further. */
 window#waybar {
     background: transparent;
+    opacity: 0.70;
 }
 
 /* Waybar hides the bar (SIGUSR1 toggle) purely by adding this class:
@@ -19,55 +48,92 @@ window#waybar.hidden {
     opacity: 0;
 }
 
+/* The groups carry no paint of their own - every segment brings its own
+   tone, exactly like the prompt. 2px inset matches general:gaps_out. */
 .modules-left,
 .modules-center,
 .modules-right {
-    background: #242424;
-    padding: 3px 3px;
-    border-radius: 10px;
+    background: transparent;
+    margin: 2px 0px;
 }
 
+.modules-left  { margin-left: 2px; }
+.modules-right { margin-right: 2px; }
+
+/* Every segment sits on the one tone; the prompt's structure is carried by
+   the text colours and the dividers instead of by a background split.
+   starship's green is the bar at rest, and $directory's peach is spent only
+   on what is live: the focused workspace, and whatever is under the
+   pointer. */
 .module {
     padding: 0px 10px;
-    color: #5c5d8d;
+    background-color: @tone-dark;
+    color: @star-green;
 }
+
+/* Rounded end caps. starship uses the  and  half-circle glyphs; at a
+   32px segment a 16px radius is the same shape, without the extra modules. */
+#clock         { border-radius: 16px 0px 0px 16px; }
+#network       { border-radius: 0px 16px 16px 0px; }
+#window        { border-radius: 16px; }
+#pulseaudio    { border-radius: 16px 0px 0px 16px; }
+#tray          { border-radius: 0px 16px 16px 0px; }
+
+/* starship's [|] dividers. In the prompt these are drawn in tone-dark on
+   top of tone-mid; with a single flat tone that would be invisible, so the
+   contrast is inverted and they are drawn in tone-mid on tone-dark. Placed
+   only between logical clusters, as in the prompt - not between every
+   module. With the arrows gone these carry the whole segmented look. */
+#workspaces,
+#network,
+#clock,
+#memory,
+#backlight,
+#power-profiles-daemon {
+    border-left: 1px solid @tone-mid;
+}
+
+:hover.module {
+    color: @star-peach;
+}
+
+/* Workspace pips rest in the same green as everything else; the focused one
+   takes the peach. */
+#workspaces {
+    padding: 0px 6px;
+}
+
 #workspaces button {
     padding: 0px 5px;
-    color: #5c5d8d;
-}
-:hover.module {
-    color: #f7a278;
+    color: @star-green;
+    background: transparent;
+    border-radius: 0px;
 }
 
 #workspaces button:hover {
-    color: #f7a278;
-    border-color: #242424;
+    color: @star-peach;
 }
+
 #workspaces button.active {
-    color: #66BB6A;
-    border-radius: 20px;
+    color: @star-peach;
 }
+
 #workspaces button.urgent {
-    color: #88292f;
-    border-radius: 20px;
+    color: @star-urgent;
 }
 
 #power-profiles-daemon {
-    padding-left: 0px;
+    padding-left: 4px;
+    padding-right: 6px;
 }
 
-#tray,
-#custom-hypr {
-    padding: 3px 5px;
-    padding-right: 5px;
-    background-color: #393A3B;
-    border-radius: 7px;
-    color: #66BB6A;
+#tray {
+    padding-right: 12px;
 }
 
 @keyframes blink_high {
     to {
-        color: #66BB6A;
+        color: @star-green;
     }
 }
 
@@ -83,16 +149,26 @@ window#waybar.hidden {
 @keyframes blink_low {
     to {
         color: #ffffff;
-        background-color: #88292f;
-        border-radius: 10px;
+        background-color: @star-urgent;
     }
 }
 
 #battery.critical:not(.charging) {
     animation-name: blink_low;
-    border-radius: 10px;
     animation-duration: .8s;
     animation-timing-function: cubic-bezier(.42,0,.58,1);
     animation-iteration-count: infinite;
     animation-direction: alternate;
+}
+
+tooltip {
+    background: @tone-dark;
+    border: 1px solid @tone-mid;
+    border-radius: 10px;
+}
+
+tooltip label {
+    font-size: 15px;
+    color: @star-green;
+    font-family: "CaskaydiaCove Nerd Font", "Symbols Nerd Font Mono";
 }

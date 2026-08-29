@@ -4,17 +4,21 @@
     "position": "top",
     // Waybar's implicit default is 30, which is shorter than the modules need
     // at this font size; leaving it implicit forces a second configure pass.
-    "height": 32,
+    "height": 36,
+    // Laid out in the same order as starship.toml's format string: the
+    // distro-logo segment, then the info segments, then the clock - so the
+    // bar reads as another prompt line. The prompt's two background tones
+    // are collapsed to one in style.css, so the segments are separated by
+    // starship's [|] hairline dividers rather than powerline arrows.
     "modules-left": [
         "clock",
         "ext/workspaces",
-		"network"
+        "network",
     ],
     "modules-center": [
         "hyprland/window"
     ],
     "modules-right": [
-		"custom/hypr",
         "pulseaudio",
         "memory",
         "cpu",
@@ -63,14 +67,14 @@
     },
 	"network": {
 		// "interface": "wlp2s0",
-		"format": "{ifname}",
-		"format-wifi": "{essid} ({signalStrength}%) ",
-		"format-ethernet": "{ipaddr} ",
-		"format-disconnected": "Disconnected", //An empty format will hide the module.
-		"tooltip-format": "{ifname} via {gwaddr} 󰊗",
-		"tooltip-format-wifi": "{essid} ({signalStrength}%) ",
-		"tooltip-format-ethernet": "{ifname} ",
-		"tooltip-format-disconnected": "Disconnected",
+		"format": "{ifname} ",
+		"format-wifi": "{essid} ({signalStrength}%)  ",
+		"format-ethernet": "{ipaddr}  ",
+		"format-disconnected": "Disconnected ", //An empty format will hide the module.
+		"tooltip-format": "{ifname} via {gwaddr} 󰊗 ",
+		"tooltip-format-wifi": "{essid} ({signalStrength}%)  ",
+		"tooltip-format-ethernet": "{ifname}  ",
+		"tooltip-format-disconnected": "Disconnected ",
 		"max-length": 50
 	},
     "pulseaudio": {
@@ -103,7 +107,7 @@
 			"󱩔",
 			"󱩕",
 			"󱩖",
-            "󰛨"
+      "󰛨"
 		]
 	},
 	"clock": {
@@ -179,10 +183,10 @@
 		"tooltip-format": "Power profile:\t{profile}\nDriver:\t\t{driver}",
 		"tooltip": true,
 		"format-icons": {
-			"default": "",
-			"performance": "",
-			"balanced": "",
-			"power-saver": ""
+			"default": " ",
+			"performance": " ",
+			"balanced": " ",
+			"power-saver": " "
 		}
 	},
 	"disk": {
